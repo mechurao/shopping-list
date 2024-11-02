@@ -7,6 +7,9 @@ const apiController = require('./api/apiController');
 
 const DBService = require('./services/db_service');
 
+const SessionConfig = require('./configurations/SessionConfig');
+
+
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -29,13 +32,7 @@ const port = process.env.PORT || 8080;
     app.use(express.urlencoded({ extended: true }));
 
 // session config
-    app.use(session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: true,
-        cookie: { maxAge: Number(process.env.SESSION_EXPIRATION) },
-        rolling: true,
-    }));
+    app.use(session(SessionConfig));
 
     app.use('/api', apiController);
 
