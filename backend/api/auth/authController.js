@@ -1,7 +1,9 @@
-import express from "express";
-import registerABL from "./ABL/registerABL";
-import loginABL from "./ABL/loginABL";
-import checkSessionABL from "./ABL/checkSessionABL";
+const {registerABL} = require("./ABL/registerABL");
+const {loginABL} = require("./ABL/loginABL");
+const {checkSessionABL} = require("./ABL/checkSessionABL");
+
+
+const express = require('express');
 
 const router = express.Router();
 
@@ -17,4 +19,4 @@ router.get("/check-session", async (req, res) => {
     await checkSessionABL(req, res);
 });
 
-export default router;
+module.exports = router;

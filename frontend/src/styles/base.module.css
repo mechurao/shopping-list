@@ -1,0 +1,32 @@
+#baseContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+}
+
+#baseTitle {
+    width: 100%;
+    height: var(--header-height);
+    background: var(--main-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: auto;
+    padding-left: 10px;
+}
+
+#baseContent {
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+#contentWrapper {
+    flex-grow: 1;
+    padding: 0 10px;
+    overflow-y: auto;
+    height: calc(100vh - var(--header-height));
+}

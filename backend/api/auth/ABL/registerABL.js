@@ -1,4 +1,6 @@
 const {StatusCodes} = require("http-status-codes");
+const DBService = require('../../../services/db_service');
+const {hashString} = require("../../../utils/hash");
 
 async function registerABL(req, res){
     try {
@@ -7,7 +9,14 @@ async function registerABL(req, res){
             console.error("Missing login parameters");
             return res.sendStatus(StatusCodes.BAD_REQUEST);
         }
-        return res.sendStatus(StatusCodes.OK);
+
+        const hashed = hashString(password);
+        let data = req.body;
+        data.password = hashed;
+
+        let query = await DBService.addUser(data);
+        let status = (query === true) ? StatusCodes.OK : StatusCodes.INTERNAL_SERVER_ERROR;
+        return res.sendStatus(status);
 
     }catch(err){
         console.error(`Register error : ${err}`);
@@ -15,4 +24,4 @@ async function registerABL(req, res){
     }
 }
 
-module.exports = registerABL;
+module.exports = {registerABL};

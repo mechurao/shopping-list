@@ -1,17 +1,21 @@
 const { MongoClient } = require('mongodb');
 
-const dbUrl = `mongodb://${process.env.DB_URL}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+const dbName = process.env.DB_NAME;
+const dbUrl = `mongodb://${process.env.DB_URL}:${process.env.DB_PORT}/${dbName}`;
+
+const usersCollection = 'users';
 
 class DBService {
     constructor() {
         if (!DBService.instance) {
             DBService.instance = this;
         }
-        this.connection = undefined;
+        this.client = undefined;
+        this.db = undefined;
     }
 
     async initConnection() {
-        if (this.connection) {
+        if (this.client) {
             return true;
         }
 
@@ -21,7 +25,8 @@ class DBService {
                 useUnifiedTopology: true,
             });
 
-            this.connection = await client.connect();
+            this.client = await client.connect();
+            this.db = this.client.db(dbName);
             console.log('Successfully connected to MongoDB');
             return true;
         } catch (err) {
@@ -31,12 +36,36 @@ class DBService {
     }
 
     async closeConnection() {
-        if (this.connection) {
-            await this.connection.close();
-            this.connection = undefined;
+        if (this.client) {
+            await this.client.close();
+            this.client = undefined;
             console.log('Connection to MongoDB closed');
         }
     }
+
+    async addUser(user){
+        try {
+            const result = await this.db.collection(usersCollection).insertOne(user);
+            return !!result.insertedId;
+        }catch (err){
+            console.error(`Add user error : ${err}`);
+            return false;
+        }
+    }
+
+    async getUser(email){
+        try{
+            const user = await this.db.collection(usersCollection).findOne({ email });
+            return user || undefined;
+        }catch (err){
+            console.error(`Get user error : ${err}`);
+            return undefined;
+        }
+
+    }
+
+
+
 }
 
 const instance = new DBService();

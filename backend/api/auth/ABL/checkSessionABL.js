@@ -11,14 +11,11 @@ async function checkSessionABL(req, res) {
         if(!req.session.user){
             return res.sendStatus(StatusCodes.UNAUTHORIZED);
         }
-
         return res.sendStatus(StatusCodes.OK);
-
-
     }catch(err){
         console.error(`Check session error : ${err}`);
         return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
 
-module.exports = checkSessionABL;
+module.exports = {checkSessionABL};
