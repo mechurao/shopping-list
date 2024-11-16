@@ -11,6 +11,9 @@ const Strings = {
     myLists: "My Lists",
     participating: "Participating",
     listName: 'List name',
+    addItem: 'Add item',
+    items: 'Items',
+    add: 'Add'
 
 }
 export default Strings;

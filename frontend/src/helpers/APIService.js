@@ -77,4 +77,42 @@ export default class APIService {
         }
     }
 
+    // List API
+    static async addList(list){
+        try{
+            let response = await fetch(ApiLinks.addListUrl, {
+                method: HttpMethod.POST,
+                timeout: this.timeout,
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({list:list}),
+            });
+            const status = response.status;
+            alert(ApiLinks.addListUrl);
+            return (status === StatusCodes.OK);
+
+        }catch (e) {
+            console.error("Adding list error", e);
+            return false;
+        }
+    }
+
+    static async getLists(){
+        try{
+            let response = await fetch(ApiLinks.getListsUrl, {
+               method: HttpMethod.GET,
+               timeout: this.timeout,
+            });
+            const status = response.status;
+            if(status !== StatusCodes.OK){
+                return undefined;
+            }
+            return await response.json();
+        }catch (e) {
+            console.error("Getting lists error : ", e);
+            return undefined;
+        }
+    }
+
+
+
 }

@@ -4,6 +4,7 @@ const dbName = process.env.DB_NAME;
 const dbUrl = `mongodb://${process.env.DB_URL}:${process.env.DB_PORT}/${dbName}`;
 
 const usersCollection = 'users';
+const listsCollection = 'lists';
 
 class DBService {
     constructor() {
@@ -61,7 +62,16 @@ class DBService {
             console.error(`Get user error : ${err}`);
             return undefined;
         }
+    }
 
+    async addList(list){
+        try{
+            const query = await this.db.collection(listsCollection).insertOne(list);
+            return !!query.acknowledged;
+        }catch (err){
+            console.error(`Add list error : ${err}`);
+            return false;
+        }
     }
 
 
