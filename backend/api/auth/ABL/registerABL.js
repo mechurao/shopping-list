@@ -15,9 +15,19 @@ async function registerABL(req, res){
         data.password = hashed;
 
         let query = await DBService.addUser(data);
-        let status = (query === true) ? StatusCodes.OK : StatusCodes.INTERNAL_SERVER_ERROR;
-        return res.sendStatus(status);
 
+        if(query === true){
+            req.session.user = {
+                id: query._id,
+                username:username,
+                email:email,
+            };
+            return res.sendStatus(StatusCodes.OK);
+        }else{
+            req.session.destroy();
+            return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+
+        }
     }catch(err){
         console.error(`Register error : ${err}`);
         return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);

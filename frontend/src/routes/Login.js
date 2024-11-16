@@ -7,6 +7,8 @@ import APIService from "../helpers/APIService";
 import LoadingWheel from "../components/LoadingWheel";
 import TextField from "../components/TextField";
 import PageControl from "../utils/PageControl";
+import SubmitButton from "../components/UI/SubmitButton";
+import {StatusCodes} from "http-status-codes";
 const emailValidator = require("react-email-validator");
 
 function Login(){
@@ -48,6 +50,11 @@ function Login(){
 
     }, [sessionCheck]);
 
+    useEffect(() => {
+        setSubmitDisabled((!inputValid()));
+    }, [inputValid]);
+
+
     const submitAction = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -61,21 +68,20 @@ function Login(){
         setLoading(false);
         const status = res.status;
 
-
-
+        if(status !== StatusCodes.OK){
+            alert(`Login failed : ${status}`);
+            return;
+        }
+        navigate("/overview", {replace: true});
     }
-
-
-
-
-
     return (
         <>
             <LoadingWheel active={loading}/>
             <div className={styles.wrapper}>
                 <h2>{Strings.login}</h2>
                 <TextField inputType={'email'} value={email} onChange={setEmail} placeholder={Strings.email}/><br/>
-                <TextField inputType={'password'} value={password} onChange={setPassword} placeholder={Strings.password}/>
+                <TextField inputType={'password'} value={password} onChange={setPassword} placeholder={Strings.password}/><br/>
+                <SubmitButton onClick={submitAction} disabled={submitDisabled}/>
             </div>
         </>
     );

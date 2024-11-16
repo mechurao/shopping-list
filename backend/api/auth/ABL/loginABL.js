@@ -24,11 +24,13 @@ async function loginABL(req, res) {
         }
 
         // save user id to active session
-        req.session.user = user;
-
+        req.session.user = {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+        };
 
         return res.sendStatus(StatusCodes.OK);
-
     }catch(err){
         console.error(`Login error : ${err}`);
         return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);

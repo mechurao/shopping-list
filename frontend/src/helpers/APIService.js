@@ -54,4 +54,27 @@ export default class APIService {
         }
     }
 
+    static async getUserDetails(){
+        try{
+            let response = await fetch(ApiLinks.getUserDetailsURL, {
+               method: HttpMethod.GET,
+               timeout: this.timeout,
+            });
+            const status = response.status;
+            const json = await response.json();
+
+            if(status !== StatusCodes.OK){
+                return {status: status}
+            }
+            return {
+                status: StatusCodes.OK,
+                data: json
+            }
+
+        }catch (e) {
+            console.error("Getting user details error", e);
+            return undefined;
+        }
+    }
+
 }

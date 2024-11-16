@@ -7,8 +7,9 @@ import LoadingWheel from "../components/LoadingWheel";
 import styles from "../styles/login.module.css";
 import TextField from "../components/TextField";
 import PageControl from "../utils/PageControl";
-import SubmitButton from "../components/SubmitButton";
+import SubmitButton from "../components/UI/SubmitButton";
 import {res} from "react-email-validator";
+import {StatusCodes} from "http-status-codes";
 const emailValidator = require("react-email-validator");
 
 
@@ -59,8 +60,13 @@ function Register() {
         });
 
         const status = submit.status;
+        if(status !== StatusCodes.OK){
+            alert(`Register failed : ${status}`);
+            return;
+        }
+        alert(status);
 
-
+        navigate('/overview', {replace: true})
     }
 
     useEffect(() => {
@@ -73,7 +79,7 @@ function Register() {
             <LoadingWheel active={loading}/>
             <div className={styles.wrapper}>
                 <div id={styles.form_wrapper}>
-                    <h2>{Strings.login}</h2>
+                    <h2>{Strings.register}</h2>
                     <TextField inputType={'text'} value={username} onChange={setUsername}
                                placeholder={Strings.username}/><br/>
                     <TextField inputType={'email'} value={email} onChange={setEmail} placeholder={Strings.email}/><br/>

@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function SubmitButton({ label = "Submit", onClick, disabled = false }) {
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Enter' && !disabled) {
+                onClick(event);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClick, disabled]);
+
     return (
         <button
-            type="submit"
+            type="button"
             onClick={onClick}
             disabled={disabled}
             style={{
