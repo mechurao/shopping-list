@@ -87,7 +87,6 @@ export default class APIService {
                 body: JSON.stringify({list:list}),
             });
             const status = response.status;
-            alert(ApiLinks.addListUrl);
             return (status === StatusCodes.OK);
 
         }catch (e) {
@@ -96,20 +95,54 @@ export default class APIService {
         }
     }
 
-    static async getLists(){
+    static async getListDetails(id){
         try{
-            let response = await fetch(ApiLinks.getListsUrl, {
-               method: HttpMethod.GET,
-               timeout: this.timeout,
+            let response = await fetch(ApiLinks.getListDetailsUrl, {
+                method: HttpMethod.POST,
+                timeout: this.timeout,
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({listID:id}),
             });
             const status = response.status;
             if(status !== StatusCodes.OK){
                 return undefined;
             }
+            const data = await response.json();
+            return data;
+
+        }catch(err){
+            console.error("Getting list details error", err);
+            return undefined;
+        }
+    }
+
+    static async getOwnerLists(){
+
+        try{
+            let response = await fetch(ApiLinks.getOwnerListsUrl, {
+               method: HttpMethod.GET,
+               timeout: this.timeout,
+            });
+            const status = response.status;
+
+            if(status !== StatusCodes.OK){
+                return undefined;
+            }
             return await response.json();
         }catch (e) {
+            alert(e);
             console.error("Getting lists error : ", e);
-            return undefined;
+            return {status:StatusCodes.INTERNAL_SERVER_ERROR}
+        }
+    }
+
+
+    static async getParticipatingLists(){
+        try{
+
+        }catch(err){
+            console.error("Getting list participating lists error : ",err);
+            return {status:StatusCodes.INTERNAL_SERVER_ERROR}
         }
     }
 

@@ -9,6 +9,9 @@ const ApiLinks = {
 
     addListUrl: `${listURL}/add-list`,
     getListsUrl: `${listURL}/get-lists`,
+    getOwnerListsUrl: `${listURL}/get-owner-lists`,
+    getParticipatingListsUrl: `${listURL}/get-participating-lists`,
+    getListDetailsUrl: `${listURL}/get-list-details`,
 
 }
 export default ApiLinks

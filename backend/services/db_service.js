@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId} = require('mongodb');
 
 const dbName = process.env.DB_NAME;
 const dbUrl = `mongodb://${process.env.DB_URL}:${process.env.DB_PORT}/${dbName}`;
@@ -71,6 +71,37 @@ class DBService {
         }catch (err){
             console.error(`Add list error : ${err}`);
             return false;
+        }
+    }
+
+    async getList(listID){
+        try{
+            const list = await this.db.collection(listsCollection).findOne({ _id: new ObjectId(listID) });
+            return list || undefined;
+        }catch (e) {
+            console.error("Loading list details error : ",e);
+            return undefined;
+        }
+    }
+
+
+    async  getOwnerLists(id){
+        try{
+            const query = await this.db.collection(listsCollection).find({ ownerID: id  }).toArray();
+            return query || undefined;
+        }catch (err){
+            console.error(`Get owner list error : ${err}`);
+            return undefined;
+        }
+    }
+
+    async getParticipatingLists(id){
+        try{
+            const query = await this.db.collection(listsCollection).find({ participants: id }).toArray();
+            return query || undefined;
+        }catch (err){
+            console.error(`Get owner list error : ${err}`);
+            return undefined;
         }
     }
 
