@@ -1,9 +1,9 @@
 import Navbar from "./NavBar";
 import { IconButton} from "@mui/material";
-import {ArrowBack} from "@mui/icons-material";
+import {ArrowBack, Delete, Logout} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
-function ListDetailNavBar({name}){
+function ListDetailNavBar({name, deleteAction, leaveAction}){
     const navigate = useNavigate();
 
     const back = () => {
@@ -14,6 +14,14 @@ function ListDetailNavBar({name}){
         leftComponents={[
             <IconButton onClick={back}>
                 <ArrowBack/>
+            </IconButton>
+        ]}
+        rightComponents={[
+            <IconButton onClick={deleteAction} sx={{ color: 'red' }}>
+                <Delete/>
+            </IconButton>,
+            <IconButton onClick={leaveAction}>
+                <Logout/>
             </IconButton>
         ]}
     />);

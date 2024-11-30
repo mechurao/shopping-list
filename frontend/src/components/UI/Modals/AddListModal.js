@@ -6,6 +6,8 @@ import Strings from "../../../values/Strings";
 import {Add, Remove} from "@mui/icons-material";
 import APIService from "../../../helpers/APIService";
 import SubmitButton from "../SubmitButton";
+import PageControl from "../../../utils/PageControl";
+import ModalBox from "../ModalBox";
 
 
 function NewItemRow({name, remove, index}){
@@ -55,7 +57,8 @@ function AddListModal({onClose, addFormOpened}) {
 
         let result = await APIService.addList(list);
         if(result === true){
-            alert("List added");
+            alert(Strings.listAdded);
+            PageControl.refresh();
         }else{
             alert("error");
         }
@@ -72,54 +75,28 @@ function AddListModal({onClose, addFormOpened}) {
             onClose={onClose}
             open={addFormOpened}
         >
-            <Box
-                sx={{
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 300,
-                    bgcolor: 'white',
-                    borderRadius: 2,
-                    boxShadow: 24,
-                    p: 4,
-                    textAlign: 'center',
-                    position: 'relative',
-                }}
-            >
+            <ModalBox onClose={onClose} title={Strings.addList}>
+                <TextField inputType={'text'} placeholder={Strings.listName} value={listName} onChange={setListName}></TextField><br/>
+                <TextField
+                    inputType={'text'}
+                    placeholder={Strings.addItem}
+                    value={newItemName}
+                    onChange={setNewItemName}/>
                 <IconButton
-                    sx={{
-                        position: 'absolute',
-                        top: 8,
-                        right: 8,
-                    }}
-                    onClick={onClose}
-                >
-                    <CloseIcon />
+                    disabled={addItemDisabled}
+                    onClick={addItem}>
+                    <Add/>
                 </IconButton>
-
-                <Box component="span" sx={{ display: 'block', mb: 2 }}>
-                    <TextField inputType={'text'} placeholder={Strings.listName} value={listName} onChange={setListName}></TextField><br/>
-                    <TextField
-                        inputType={'text'}
-                        placeholder={Strings.addItem}
-                        value={newItemName}
-                        onChange={setNewItemName}/>
-                    <IconButton
-                        disabled={addItemDisabled}
-                        onClick={addItem}>
-                        <Add/>
-                    </IconButton>
-                    <br/>
-                    <h3>{Strings.items}</h3><br/>
-                    <div>
-                        {items.map((item, index) => (
-                            <NewItemRow name={item} index={index} remove={deleteItem}/>
-                        ))
-                        }
-                    </div><br/>
-                    <SubmitButton label={Strings.add} onClick={submitAction}/>
-                </Box>
-            </Box>
+                <br/>
+                <h3>{Strings.items}</h3><br/>
+                <div>
+                    {items.map((item, index) => (
+                        <NewItemRow name={item} index={index} remove={deleteItem}/>
+                    ))
+                    }
+                </div><br/>
+                <SubmitButton label={Strings.add} onClick={submitAction}/>
+            </ModalBox>
         </Modal>
     );
 }

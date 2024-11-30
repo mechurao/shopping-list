@@ -1,4 +1,6 @@
 const Strings = {
+    home: "Home",
+
     login: "Login",
     email: "Email",
     password: "Password",
@@ -13,7 +15,17 @@ const Strings = {
     listName: 'List name',
     addItem: 'Add item',
     items: 'Items',
-    add: 'Add'
+    add: 'Add',
+    participants: 'Participants',
+    listDeleted: 'List deleted',
+    listAdded: 'List added',
+    addList: 'Add list',
+
+    itemsCompleted: 'items completed',
+    incompleteOnly: 'Incomplete only',
+
+    areYouSure: 'Are you sure?',
+    permanentActions: 'This action is permanent',
 
 }
 export default Strings;

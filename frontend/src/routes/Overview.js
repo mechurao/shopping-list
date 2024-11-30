@@ -8,11 +8,13 @@ import ContentDivider from "../components/UI/Dividers/ContentDivider";
 import Strings from "../values/Strings";
 import APIService from "../helpers/APIService";
 import UserListsView from "../components/UI/Lists/UserListsView";
+import PageControl from "../utils/PageControl";
 
 function Overview() {
     const [addFormOpened, setAddFormOpened] = useState(false);
     const [userLists, setUserLists] = useState([]);
     const [participantaList, setParticipantaList] = useState([]);
+    PageControl.setTitle(Strings.overview);
 
     const getUserLists = useCallback(async () => {
 

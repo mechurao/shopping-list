@@ -95,6 +95,23 @@ export default class APIService {
         }
     }
 
+    static async deleteList(listID){
+        try{
+            let response = await fetch(ApiLinks.deleteListUrl, {
+               method: HttpMethod.DELETE,
+               timeout: this.timeout,
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({listID:listID}),
+            });
+            const status = response.status;
+            return (status === StatusCodes.OK);
+        }catch(err){
+            console.error("Delete list error", err);
+            return false;
+        }
+    }
+
+
     static async getListDetails(id){
         try{
             let response = await fetch(ApiLinks.getListDetailsUrl, {
@@ -130,7 +147,6 @@ export default class APIService {
             }
             return await response.json();
         }catch (e) {
-            alert(e);
             console.error("Getting lists error : ", e);
             return {status:StatusCodes.INTERNAL_SERVER_ERROR}
         }
@@ -146,6 +162,61 @@ export default class APIService {
         }
     }
 
+    // items methods
+    static async checkItem(listID, itemID){
+
+        try{
+            let response = await fetch(ApiLinks.checkListItemUrl, {
+               method: HttpMethod.PUT,
+               timeout: this.timeout,
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({listID:listID, itemID:itemID}),
+            });
+            const status = response.status;
+            if(status !== StatusCodes.OK){
+                return undefined;
+            }
+            const data = await response.json();
+            return data.checked;
+
+        }catch (err){
+            console.error("Checking item with id error : ",err);
+            return undefined;
+        }
+    }
+
+    static async addListItem(listID, item){
+        try{
+            let response = await fetch(ApiLinks.addListItemUrl, {
+               method: HttpMethod.PUT,
+               timeout: this.timeout,
+               headers: {"Content-Type": "application/json"},
+               body: JSON.stringify({listID:listID, item:item}),
+            });
+            const status = response.status;
+            return status === StatusCodes.OK;
+        }catch(err){
+            console.error("Adding item with id error : ",err);
+            return false;
+        }
+    }
+
+    static async deleteListItem(listID, itemID){
+        try{
+            let response = await fetch(ApiLinks.deleteItemUrl, {
+               method: HttpMethod.DELETE,
+                timeout: this.timeout,
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({listID:listID, itemID:itemID}),
+            });
+            const status = response.status;
+            return status === StatusCodes.OK;
+
+        }catch(err){
+            console.error('List item deletion error : ', err);
+            return false;
+        }
+    }
 
 
 }

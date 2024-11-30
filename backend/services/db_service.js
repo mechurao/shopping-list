@@ -64,6 +64,7 @@ class DBService {
         }
     }
 
+
     async addList(list){
         try{
             const query = await this.db.collection(listsCollection).insertOne(list);
@@ -73,6 +74,20 @@ class DBService {
             return false;
         }
     }
+
+    async deleteList(listID) {
+        try {
+            const result = await this.db.collection(listsCollection).deleteOne({
+                _id: new ObjectId(listID)
+            });
+
+            return result.deletedCount > 0;
+        } catch (err) {
+            console.error(`Delete list error: ${err}`);
+            return false;
+        }
+    }
+
 
     async getList(listID){
         try{
@@ -95,15 +110,108 @@ class DBService {
         }
     }
 
-    async getParticipatingLists(id){
-        try{
-            const query = await this.db.collection(listsCollection).find({ participants: id }).toArray();
-            return query || undefined;
-        }catch (err){
-            console.error(`Get owner list error : ${err}`);
+    async getParticipatingLists(id) {
+        try {
+            const lists = await this.db.collection(listsCollection).find({ participants: id }).toArray();
+
+            if (!lists || lists.length === 0) return undefined;
+            const ownerIDs = [...new Set(lists.map(list => list.ownerID))];
+            const owners = await this.db.collection(usersCollection)
+                .find({ _id: { $in: ownerIDs.map(ownerID => new this.ObjectId(ownerID)) } })
+                .toArray();
+
+            const ownerMap = owners.reduce((acc, user) => {
+                acc[user._id.toString()] = { id: user._id, username: user.username };
+                return acc;
+            }, {});
+            const updatedLists = lists.map(list => ({
+                ...list,
+                owner: ownerMap[list.ownerID] || { id: list.ownerID, username: 'Unknown' }
+            }));
+
+            return updatedLists;
+        } catch (err) {
+            console.error(`Get participating lists error: ${err}`);
             return undefined;
         }
     }
+
+
+    async checkItem(listID, itemID) {
+        try {
+            const list = await this.db.collection(listsCollection).findOne(
+                {
+                    _id: new ObjectId(listID),
+                    'items.id': itemID,
+                }
+            );
+            if (!list) {
+                console.error(`List with ID ${listID} not found.`);
+                return undefined;
+            }
+            const item = list.items.find(item => item.id === itemID);
+            if (!item) {
+                console.error(`Item with ID ${itemID} not found.`);
+                return undefined;
+            }
+
+            const updatedChecked = !item.checked;
+
+            const result = await this.db.collection(listsCollection).updateOne({
+                    _id: new ObjectId(listID),
+                    'items.id': itemID,
+                }, {
+                    $set: {
+                        'items.$.checked': updatedChecked
+                    }
+                }
+            );
+
+            if (result.modifiedCount === 1) {
+                const updatedList = await this.db.collection(listsCollection).findOne(
+                    { _id: new ObjectId(listID) },
+                    { projection: { items: { $elemMatch: { id: itemID } } } }
+                );
+                return updatedList.items.find(item => item.id === itemID);
+            } else {
+                return undefined;
+            }
+
+        } catch (e) {
+            console.error(`Error checking item with ID : ${listID}, item ID : ${itemID}`, e);
+            return undefined;
+        }
+    }
+
+    async addListItem(listID, item) {
+        try{
+            const result = await this.db.collection(listsCollection).updateOne(
+                {_id: new ObjectId(listID)},
+                {$push: {items: item}},
+            );
+            return result.modifiedCount > 0;
+        }catch (err) {
+            console.error(`Add list item error : ${err}`);
+            return false;
+        }
+
+    }
+
+    async deleteListItem(listID, itemID) {
+        try {
+            const result = await this.db.collection(listsCollection).updateOne(
+                { _id: new this.ObjectId(listID) },
+                { $pull: { items: { id: itemID } } }
+            );
+            return result.modifiedCount > 0;
+        } catch (err) {
+            console.error(`Delete list item error: ${err}`);
+            return false;
+        }
+    }
+
+
+
 
 
 
