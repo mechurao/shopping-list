@@ -76,7 +76,13 @@ function AddListModal({onClose, addFormOpened}) {
             open={addFormOpened}
         >
             <ModalBox onClose={onClose} title={Strings.addList}>
-                <TextField inputType={'text'} placeholder={Strings.listName} value={listName} onChange={setListName}></TextField><br/>
+                <TextField
+                    inputType={'text'}
+                    placeholder={Strings.listName}
+                    value={listName}
+                    onChange={setListName}>
+
+                </TextField><br/>
                 <TextField
                     inputType={'text'}
                     placeholder={Strings.addItem}

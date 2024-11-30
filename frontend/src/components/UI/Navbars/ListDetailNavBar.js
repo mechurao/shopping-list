@@ -1,9 +1,10 @@
 import Navbar from "./NavBar";
-import { IconButton} from "@mui/material";
-import {ArrowBack, Delete, Logout} from "@mui/icons-material";
+import {IconButton, Tooltip} from "@mui/material";
+import {Archive, ArrowBack, Delete, Logout, Unarchive} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
+import Strings from "../../../values/Strings";
 
-function ListDetailNavBar({name, deleteAction, leaveAction}){
+function ListDetailNavBar({name, archived,archiveAction,deleteAction, leaveAction}){
     const navigate = useNavigate();
 
     const back = () => {
@@ -12,17 +13,28 @@ function ListDetailNavBar({name, deleteAction, leaveAction}){
     return(<Navbar
         title={name}
         leftComponents={[
-            <IconButton onClick={back}>
+            <IconButton onClick={back} sx={{ color: 'white' }}>
                 <ArrowBack/>
             </IconButton>
         ]}
         rightComponents={[
-            <IconButton onClick={deleteAction} sx={{ color: 'red' }}>
-                <Delete/>
-            </IconButton>,
-            <IconButton onClick={leaveAction}>
-                <Logout/>
-            </IconButton>
+            <Tooltip title={(archived === false) ? Strings.archiveList : Strings.unarchiveList}>
+                <IconButton onClick={archiveAction} sx={{ color: 'white' }}>
+                    {(archived === false) ? <Archive/> : <Unarchive/>}
+                </IconButton>,
+            </Tooltip>,
+
+            <Tooltip title={Strings.deleteList}>
+                <IconButton onClick={deleteAction} sx={{ color: 'red' }}>
+                    <Delete/>
+                </IconButton>,
+            </Tooltip>,
+
+            <Tooltip title={Strings.leaveList}>
+                <IconButton onClick={leaveAction} sx={{ color: 'white' }}>
+                    <Logout/>
+                </IconButton>
+            </Tooltip>
         ]}
     />);
 }

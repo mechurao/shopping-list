@@ -1,26 +1,29 @@
-function ContentDivider({text}){
-
-    const styles = {
+function ContentDivider({ text, leftOption, rightOption }) {
+    const containerStyle = {
         width: '100%',
         height: '40px',
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        justifyContent: 'space-between',
         padding: '0 15px',
-    }
+    };
 
     const textStyle = {
-        position: 'absolute',
-        left: '50%',
-        transform: 'translateX(-50%)',
         fontWeight: 'bold',
         fontSize: '18px',
+        textAlign: 'center',
+        flex: 1,
+    };
+
+    const optionStyle = {
+        flexShrink: 0,
     };
 
     return (
-        <div style={styles}>
-            <span style={textStyle}>{text}</span>
-
+        <div style={containerStyle}>
+            <div style={optionStyle}>{leftOption || null}</div>
+            <div style={textStyle}>{text}</div>
+            <div style={optionStyle}>{rightOption || null}</div>
         </div>
     );
 }

@@ -22,6 +22,20 @@ export default class APIService {
         }
     }
 
+    static async logout(){
+        try{
+            let response = await fetch(ApiLinks.logoutUrl, {
+                method: HttpMethod.POST,
+                timeout: this.timeout,
+            });
+            const status = response.status;
+            return (status === StatusCodes.OK);
+        }catch(e){
+            console.error('Logout error : ',e);
+            return false;
+        }
+    }
+
     static async register(user){
         try{
             let response = await fetch(ApiLinks.registerUrl, {
@@ -107,6 +121,23 @@ export default class APIService {
             return (status === StatusCodes.OK);
         }catch(err){
             console.error("Delete list error", err);
+            return false;
+        }
+    }
+
+    static async archiveList(listID){
+        try{
+            let response = await fetch(ApiLinks.archiveListUrl, {
+               method: HttpMethod.PUT,
+               timeout: this.timeout,
+               headers: {"Content-Type": "application/json"},
+               body: JSON.stringify({listID:listID}),
+            });
+            const status = response.status;
+            alert(status);
+            return (status === StatusCodes.OK);
+        }catch(err){
+            console.error("Archive list error", err);
             return false;
         }
     }

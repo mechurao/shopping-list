@@ -16,7 +16,7 @@ function ListRow({ list }) {
             alignItems: "center",
             justifyContent: "space-between",
             padding: "10px 20px",
-            background: "white",
+            background: (list.archived === false) ?"white" : "gray",
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
             borderRadius: "10px",
             marginBottom: "10px",

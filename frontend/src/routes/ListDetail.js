@@ -9,6 +9,7 @@ import {Add} from "@mui/icons-material";
 import ListItemRow from "../UI/DataRows/ListItemRow";
 import ApiService from "../helpers/APIService";
 import {useNavigate} from "react-router-dom";
+import AddListItemModal from "../components/UI/Modals/AddListItemModal";
 
 
 function CompletionStatus({ items, newItemAction}) {
@@ -24,9 +25,31 @@ function CompletionStatus({ items, newItemAction}) {
     );
 }
 
+function ArchivedNotice() {
+    const styles = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '40px',
+        background: 'gray',
+        color: 'white',
+        margin: '0px',
+    };
+
+    return (
+        <div style={styles}>
+            <h2>{Strings.listArchived}</h2>
+        </div>
+    );
+}
+
+
 function ListDetail({listID}){
     const [list, setList] = useState(undefined);
     const [incompleteOnly, setIncompleteOnly] = useState(false);
+    const [addItemOpened, setAddItemOpened] = useState(false);
+
     const navigate = useNavigate();
 
     const getData = useCallback(async ()=>{
@@ -38,7 +61,8 @@ function ListDetail({listID}){
     }, [listID]);
 
     const addItemAction = () => {
-        alert("New Item");
+
+        setAddItemOpened(true);
     }
 
     const leaveAction = () => {
@@ -59,6 +83,20 @@ function ListDetail({listID}){
         navigate("/overview");
     };
 
+    const archiveAction = async () => {
+        // eslint-disable-next-line no-restricted-globals
+        if (confirm(Strings.areYouSure) === false) {
+            return;
+        }
+        const query = await APIService.archiveList(listID);
+        if(query === false){
+            alert("List archive error");
+            return;
+        }
+        void getData();
+    }
+
+
     useEffect(()=>{
         void getData();
     }, [getData])
@@ -66,10 +104,18 @@ function ListDetail({listID}){
     return (
         list ? (
             <Base
-                navbar={<ListDetailNavBar name={list.name} deleteAction={deleteAction} leaveAction={leaveAction} />}
+                navbar={<ListDetailNavBar
+                    archived={list.archived}
+                    archiveAction={archiveAction}
+                    name={list.name}
+                    deleteAction={deleteAction}
+                    leaveAction={leaveAction}
+                />}
                 content={
                     <div>
+                        {(list.archived === true) ? <ArchivedNotice /> : null}
                         <CompletionStatus items={list.items} newItemAction={addItemAction} />
+                        <AddListItemModal listID={list._id} addFormOpened={addItemOpened} onClose={() => setAddItemOpened(false)} />
                         <Switch
                             checked={incompleteOnly}
                             onChange={() => setIncompleteOnly(!incompleteOnly)}

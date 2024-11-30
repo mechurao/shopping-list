@@ -79,7 +79,7 @@ function Register() {
             <LoadingWheel active={loading}/>
             <div className={styles.wrapper}>
                 <div id={styles.form_wrapper}>
-                    <h2>{Strings.register}</h2>
+                    <h2>{Strings.register}</h2><br/>
                     <TextField inputType={'text'} value={username} onChange={setUsername}
                                placeholder={Strings.username}/><br/>
                     <TextField inputType={'email'} value={email} onChange={setEmail} placeholder={Strings.email}/><br/>

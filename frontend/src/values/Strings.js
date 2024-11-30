@@ -20,6 +20,17 @@ const Strings = {
     listDeleted: 'List deleted',
     listAdded: 'List added',
     addList: 'Add list',
+    listItemAdded: 'List item added',
+    itemName: 'Item name',
+    listArchived: 'List had been archived',
+    showArchived: 'Show archived',
+
+    // buttons tooltips
+    deleteList: 'Delete list',
+    leaveList: 'Leave list',
+    archiveList: 'Archive list',
+    unarchiveList: 'Unarchive list',
+    logout: 'Logout',
 
     itemsCompleted: 'items completed',
     incompleteOnly: 'Incomplete only',

@@ -6,23 +6,15 @@ import PageControl from "../../utils/PageControl";
 
 
 function ListItemRow({ listID,item }) {
-    const [checked, setChecked] = useState(false);
-
-    useEffect(() => {
-        setChecked(item.checked);
-    }, [item.checked]);
 
     const checkItem = (async () => {
-        let result = await APIService.checkItem(listID, item.id);
-        if(result){
-            setChecked(result);
-          //  item.checked = result;
-            PageControl.refresh();
-        }
+         await APIService.checkItem(listID, item.id);
+        PageControl.refresh();
     });
 
     const removeItem = (async () => {
         const result = await APIService.deleteListItem(listID, item.id);
+        PageControl.refresh();
         if(result){
             PageControl.refresh();
         }
@@ -39,7 +31,7 @@ function ListItemRow({ listID,item }) {
         }}>
             <span>{item.name}</span>
             <Checkbox
-                checked={checked}
+                checked={item.checked}
                 onChange={checkItem}
             />
             <IconButton onClick={removeItem}>

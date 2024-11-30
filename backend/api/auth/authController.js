@@ -5,6 +5,7 @@ const {getUserDetailsABL} = require("./ABL/getUserDetailsABL");
 
 
 const express = require('express');
+const {logoutABL} = require("./ABL/logoutABL");
 
 const router = express.Router();
 
@@ -14,6 +15,10 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     await loginABL(req, res);
+});
+
+router.post("/logout", async (req, res) => {
+    await logoutABL(req, res);
 });
 
 router.get("/check-session", async (req, res) => {

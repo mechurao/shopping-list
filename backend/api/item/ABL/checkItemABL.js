@@ -10,7 +10,6 @@ async function checkItemABL(req, res) {
             return res.sendStatus(StatusCodes.BAD_REQUEST);
         }
 
-        console.log(listID);
         let data = await DBService.checkItem(listID, itemID);
         if(!data){
             return res.sendStatus(StatusCodes.NOT_FOUND);

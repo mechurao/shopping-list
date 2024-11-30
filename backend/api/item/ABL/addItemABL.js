@@ -19,6 +19,7 @@ async function addItemABL(req, res) {
         }
         const query = await DBService.addListItem(listID, newItem);
         const status = (query === true) ? StatusCodes.OK : StatusCodes.INTERNAL_SERVER_ERROR;
+        console.log(status);
         return res.sendStatus(status);
 
     }catch(e){

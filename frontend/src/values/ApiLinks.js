@@ -6,6 +6,7 @@ const ApiLinks = {
 
     // auth endpoints
     loginUrl: `${authURL}/login`,
+    logoutUrl: `${authURL}/logout`,
     registerUrl: `${authURL}/register`,
     checkSessionUrl: `${authURL}/check-session`,
     getUserDetailsURL: `${authURL}/get-user-details`,
@@ -17,6 +18,7 @@ const ApiLinks = {
     getParticipatingListsUrl: `${listURL}/get-participating-lists`,
     getListDetailsUrl: `${listURL}/get-list-details`,
     deleteListUrl: `${listURL}/delete-list`,
+    archiveListUrl: `${listURL}/archive-list`,
 
     // item endpoints
     addListItemUrl: `${itemURL}/add-item`,

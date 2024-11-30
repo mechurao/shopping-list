@@ -7,6 +7,8 @@ const {GetParticipatingListsABL} = require("./ABL/getParticipatingListsABL");
 const {GetOwnerListsABL} = require("./ABL/getOwnerListsABL");
 const {GetListDetailsABL} = require("./ABL/getListDetailABL");
 const {deleteListABL} = require("./ABL/deleteListABL");
+const {archiveListABL} = require("./ABL/archiveListABL");
+
 
 const router = express.Router();
 
@@ -28,6 +30,10 @@ router.get('/get-participating-lists', async (req, res) => {
 
 router.post('/get-list-details', async (req, res) => {
   await GetListDetailsABL(req, res);
+});
+
+router.put('/archive-list', async (req, res) => {
+    await archiveListABL(req, res);
 });
 
 router.delete('/delete-list', async (req, res) => {

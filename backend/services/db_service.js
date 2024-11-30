@@ -88,6 +88,38 @@ class DBService {
         }
     }
 
+    async archiveList(listID) {
+        try {
+            const list = await this.db.collection(listsCollection).findOne(
+                { _id: new ObjectId(listID) },
+                { projection: { archived: 1 } }
+            );
+
+            if (!list) {
+                console.error(`List with ID ${listID} not found.`);
+                return false;
+            }
+
+            const updatedArchived = !list.archived;
+            const result = await this.db.collection(listsCollection).updateOne(
+                { _id: new ObjectId(listID) },
+                { $set: { archived: updatedArchived } }
+            );
+
+            if (result.modifiedCount === 1) {
+                console.log(`List with ID ${listID} successfully updated to archived: ${updatedArchived}`);
+                return true;
+            } else {
+                console.error(`Failed to update archived status for list with ID: ${listID}`);
+                return false;
+            }
+        } catch (err) {
+            console.error(`Archive list error: ${err}`);
+            return false;
+        }
+    }
+
+
 
     async getList(listID){
         try{
@@ -172,7 +204,10 @@ class DBService {
                     { _id: new ObjectId(listID) },
                     { projection: { items: { $elemMatch: { id: itemID } } } }
                 );
-                return updatedList.items.find(item => item.id === itemID);
+
+                const res = updatedList.items.find(item => item.id === itemID);
+                console.log(res);
+                return res;
             } else {
                 return undefined;
             }
@@ -200,7 +235,7 @@ class DBService {
     async deleteListItem(listID, itemID) {
         try {
             const result = await this.db.collection(listsCollection).updateOne(
-                { _id: new this.ObjectId(listID) },
+                { _id: new ObjectId(listID) },
                 { $pull: { items: { id: itemID } } }
             );
             return result.modifiedCount > 0;
