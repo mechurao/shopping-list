@@ -16,9 +16,6 @@ router.post('/add-list', async (req, res) => {
     await addListABL(req, res);
 });
 
-router.get('/get-lists', async (req, res) => {
-   await getListsABL(req, res);
-});
 
 router.get('/get-owner-lists', async (req, res) => {
     await GetOwnerListsABL(req, res);
@@ -34,6 +31,10 @@ router.post('/get-list-details', async (req, res) => {
 
 router.put('/archive-list', async (req, res) => {
     await archiveListABL(req, res);
+});
+
+router.put('rename-list', async (req, res) => {
+   //TODO
 });
 
 router.delete('/delete-list', async (req, res) => {
